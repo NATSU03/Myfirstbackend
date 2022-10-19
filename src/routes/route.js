@@ -1,73 +1,95 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/students/:name', function(req, res) {
-    let studentName = req.params.name
-    console.log(studentName)
-    res.send(studentName)
+
+//---------------------------------------------------------------Post Api-----------------------------------------------------------------------------------//
+let players =
+   [
+       {
+           "name": "manish",
+           "dob": "1/1/1995",
+           "gender": "male",
+           "city": "jalandhar",
+           "sports": [
+               "swimming"
+           ]
+       },
+       {
+           "name": "gopal",
+           "dob": "1/09/1995",
+           "gender": "male",
+           "city": "delhi",
+           "sports": [
+               "soccer"
+           ]
+       },
+       {
+           "name": "lokesh",
+           "dob": "1/1/1990",
+           "gender": "male",
+           "city": "mumbai",
+           "sports": [
+               "soccer"
+           ]
+       },
+
+
+
+   ]
+
+
+router.post('/players', function(req, res) {
+        // console.log(req.body);
+        const newplayer = req.body
+        const newplayername = req.body.name
+
+
+        const player  = players.find(x => x.name == newplayername)
+
+        if (player == undefined){
+
+            players.push(newplayer)
+        }
+        res.send( { data: players , status: true })
 })
 
-router.get("/random" , function(req, res) {
-    res.send("hi there")
-})
+//-------------------------------------------------------------Method 1--------------------------------------------------------------------------------
 
+const array = [31,32,33,34,36,37]
 
-router.get("/test-api" , function(req, res) {
-    res.send("hi FunctionUp")
-})
+router.get('/Missing_no',(req,res) => {
 
+let N 
 
-router.get("/test-api-2" , function(req, res) {
-    res.send("hi FunctionUp. This is another cool API")
-})
+for (let i = 0; i < array.length; i++) {
 
+    if (array[i]+1 !== array[i+1] ){
 
-router.get("/test-api-3" , function(req, res) {
-    res.send("hi FunctionUp. This is another cool API. And NOw i am bored of creating API's ")
-})
+        N = array[i]+1
 
+        break;
+    }
+ }
 
-router.get("/test-api-4" , function(req, res) {
-    res.send("hi FunctionUp. This is another cool API. And NOw i am bored of creating API's. PLZ STOP CREATING MORE API;s ")
-})
+ res.send('Missing number is '+ N)
 
+});
 
+//-------------------------------------------------------------Method 2-------------------------------------------------------------------------------
 
-router.get("/test-api-5" , function(req, res) {
-    res.send("hi FunctionUp5. This is another cool API. And NOw i am bored of creating API's. PLZ STOP CREATING MORE API;s ")
-})
+const array1 =[1,2,3,4,6,7,8,9]
 
-router.get("/test-api-6" , function(req, res) {
-    res.send({a:56, b: 45})
-})
+router.get('/Missing_no2',(req,res) => {
 
-router.post("/test-post", function(req, res) {
-    res.send([ 23, 45 , 6])
-})
+let N = ((array1.length + 1) * (array1.length + 2) / 2);
+ 
+    for (let i = 0; i < array1.length; i++)
 
+      N -= array1[i];
+        
+     res.send('Missing number is '+ N)
 
-router.post("/test-post-2", function(req, res) {
-    res.send(  { msg: "hi" , status: true }  )
-})
+});
 
-router.post("/test-post-3", function(req, res) {
-    // let id = req.body.user
-    // let pwd= req.body.password
-
-    // console.log( id , pwd)
-
-    console.log( req.body )
-
-    res.send(  { msg: "hi" , status: true }  )
-})
-
-
-
-router.post("/test-post-4", function(req, res) {
-    let arr= [ 12, "functionup"]
-    let ele= req.body.element
-    arr.push(ele)
-    res.send(  { msg: arr , status: true }  )
-})
 
 module.exports = router;

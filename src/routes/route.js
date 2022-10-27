@@ -9,7 +9,7 @@ router.get("/Booklist", BookController.booklist)
 
 router.get("/getBooksInYear", BookController.getBooksInYear)
 
-router.get("/getParticularBooks", BookController.getParticularBooks)
+router.post("/getParticularBooks", BookController.getParticularBooks)
 
 router.get("/getXINRBooks", BookController.getXINRBooks)
 

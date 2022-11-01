@@ -3,30 +3,19 @@ const BookModel = require("../models/bookModel")
 
 const createBook= async function (req, res) {
     let data= req.body
-
     let savedData= await BookModel.create(data)
     res.send({msg: savedData})
 }
 
-
-
-
-
-
 const getBooksData = async function (req, res) {
-    let allBooks = await BookModel.find({ authorName: "HO" })
+    let allBooks = await BookModel.find({ authorName: "vishwas" })
     console.log(allBooks)
     if (allBooks.length > 0) res.send({ msg: allBooks, condition: true })
     else res.send({ msg: "No books found", condition: false })
 }
 
-
 const updateBooks = async function (req, res) {
-    let data = req.body // {sales: "1200"}
-    // let allBooks= await BookModel.updateMany( 
-    //     { author: "SK"} , //condition
-    //     { $set: data } //update in data
-    //  )
+    let data = req.body 
     let allBooks = await BookModel.findOneAndUpdate(
         { authorName: "ABC" }, //condition
         { $set: data }, //update in data
@@ -46,8 +35,6 @@ const deleteBooks = async function (req, res) {
 
     res.send({ msg: allBooks })
 }
-
-
 
 const totalSalesPerAuthor = async function (req, res) {
     // let data = req.body 

@@ -3,27 +3,56 @@ const userModel = require("../models/userModel");
 
 
 const createUser = async function (req, res) {
-  let data = req.body;
-  let savedData = await userModel.create(data);
-  res.send({ msg: savedData });
+
+  try {
+
+    let data = req.body;
+
+    if (Object.keys(data).length == 0){
+
+    return res.status(400).send({msg: "no data"})}
+
+    let savedData = await userModel.create(data);
+    
+    return res.status(201).send({ msg: savedData });
+    
+  } catch (error) {
+
+    console.log(error);
+
+    return res.status(500).send({msg:error.message})
+
+  }
+  
 };
 
 
-//*************************************************************************************************************************** */
+
+//*********************************************************************************************************************************************/
+
 const loginUser = async function (req, res) {
 
-  let userName = req.body.emailId;
-  let password = req.body.password;
-  let user = await userModel.findOne({ emailId: userName, password: password });
+  try {
 
-  if (!user)
-    return res.send({status: false,msg: "username or the password is not valid or user doesn't exit "});
+  let userName  = req.body.emailId;
+  let password = req.body.password;
+
+  let user = await userModel.findOne({ emailId: userName, password: password });
+    
+    if (!user)
+    return res.status(400).send({status: false,msg: "username or the password is not valid or user does not exit "});
 
   let token = jwt.sign({userId: user._id.toString(),batch: "Lithium",organisation: "FunctionUp"},"Thousand-Years-Blood-war");
 
   res.setHeader("x-auth-token", token);
 
-  res.send({ status: true, token: token });
+  res.status(200).send({ status: true, token: token });
+    
+  } catch (error) {
+
+     res.status(500).send(error.message)
+  }
+ 
 };
 
 //******************************************************************************************************************************************* */
@@ -31,37 +60,62 @@ const loginUser = async function (req, res) {
 
 const getUserData = async function (req, res) {
 
+try {
+  
   let userDetails = await userModel.findById(req.params.userId);
 
-  res.send({ status: true, data: userDetails });   
+  res.status(200).send({ status: true, data: userDetails });  
+  
+} catch (error) {
 
+      res.status(500).send(error.message || "user is not valid")
+    
+    }
+   
 };
 
 
-//********************************************************************************************************************* */
+//********************************************************************************************************************************* */
 
 
 const updateUser = async function (req, res) {
 
+try {
+  
   let userData = req.body;
   let updatedUser = await userModel.findOneAndUpdate({ _id: req.params.userId }, userData,{new:true});
-  res.send({ status: true, data: updatedUser });
+  res.status(200).send({ status: true, data: updatedUser });
+  
+} catch (error) {
+
+      res.status(500).send(error.message)
+
+}
 
 };
 
-//************************************************************************************************************************ */
+//********************************************************************************************************************************* */
 
 const deleteUser = async function (req, res) {
 
+try { 
+  
   let userData = req.body;
   let updatedUser = await userModel.findOneAndUpdate({ _id: req.params.userId}, userData,{new:true});
-  res.send({ status: true, data: updatedUser });
+  return res.status(200).send({ status: true, data: updatedUser });
+  
+} catch (error) {
 
+  res.status(500).send(error.message)
+  
+}
 };
 //*********************************************************************************************************************************** */
 
 const postMessage = async function (req, res) {
 
+  try {
+    
   let blog = req.body.blog
 
   let user = await userModel.findById(req.params.userId);
@@ -71,8 +125,15 @@ const postMessage = async function (req, res) {
   bolgs.push(blog)
 
   let updatedUser = await userModel.findOneAndUpdate({_id: req.params.userId},{posts:bolgs},{new: true})
-  return res.send({status: true, data: updatedUser})
+  return res.status(200).send({status: true, data: updatedUser})
 
+
+  } catch (error) {
+
+      res.status(500).send(error.message)
+    
+  }
+  
 }
 
 //********************************************************************************************************************************************** */

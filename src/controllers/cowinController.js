@@ -19,7 +19,6 @@ let CreateMeme = async function (req, res) {
         }
 
         let MemeCreated = await axios(option)
-
         res.status(200).send({MemeByMemeLORD:MemeCreated.data})
 
 

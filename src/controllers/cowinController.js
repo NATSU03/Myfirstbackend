@@ -1,85 +1,35 @@
 let axios = require("axios")
 
 
-let getStates = async function (req, res) {
+
+
+
+let getweather = async function (req, res) {
+
+    let cityName = req.query.q
+    let key = req.query.appid
 
     try {
-        let options = {
-            method: 'get',
-            url: 'https://cdn-api.co-vin.in/api/v2/admin/location/states'
+
+        let cities = ["Bengaluru","Pune","Mumbai", "Delhi", "Kolkata", "Chennai", "London", "Moscow"]
+
+        let citytemp = []
+
+        for (let i = 0; i< cities.length;i++){
+
+        const result = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${cities[i]}&appid=${key}`)
+
+        citytemp.push({city: cities[i],temp:result.data.main.temp})
+
         }
-        let result = await axios(options);
-        console.log(result)
-        let data = result.data
-        res.status(200).send({ msg: data, status: true })
-    }
-    catch (err) {
-        console.log(err)
-        res.status(500).send({ msg: err.message })
-    }
-}
-
-
-let getDistricts = async function (req, res) {
-    try {
-        let id = req.params.stateId
-        let options = {
-            method: "get",
-            url: `https://cdn-api.co-vin.in/api/v2/admin/location/districts/${id}`
-        }
-        let result = await axios(options);
-        console.log(result)
-        let data = result.data
-        res.status(200).send({ msg: data, status: true })
-    }
-    catch (err) {
-        console.log(err)
-        res.status(500).send({ msg: err.message })
-    }
-}
-
-let getByPin = async function (req, res) {
-    try {
-        let pin = req.query.pincode
-        let date = req.query.date
-        console.log(`query params are: ${pin} ${date}`)
-        var options = {
-            method: "get",
-            url: `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=${pin}&date=${date}`
-        }
-        let result = await axios(options)
-        console.log(result.data)
-        res.status(200).send({ msg: result.data })
-    }
-    catch (err) {
-        console.log(err)
-        res.status(500).send({ msg: err.message })
-    }
-}
-
-let getOtp = async function (req, res) {
-    try {
-        let blahhh = req.body
         
-        console.log(`body is : ${blahhh} `)
-        var options = {
-            method: "post",
-            url: `https://cdn-api.co-vin.in/api/v2/auth/public/generateOTP`,
-            data: blahhh
-        }
-
-        let result = await axios(options)
-        console.log(result.data)
-        res.status(200).send({ msg: result.data })
+        return res.status(200).send({ data:citytemp })
     }
     catch (err) {
-        console.log(err)
         res.status(500).send({ msg: err.message })
     }
 }
 
 
-module.exports.getStates = getStates
-module.exports.getDistricts = getDistricts
-module.exports.getByPin = getByPin
-module.exports.getOtp = getOtp
+
+module.exports.getgetweather =getweather
